@@ -1,0 +1,33 @@
+title New note web page sequence diagram
+
+note over browser:
+user input text and clicking the submit button
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+
+note over server:
+The server creates a new note object
+and adds it to an array called notes
+response redirect to https://studies.cs.helsinki.fi/exampleapp/notes
+end note
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+server-->browser: HTML-code
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server-->browser: main.css
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+server-->browser: main.js
+
+note over browser:
+browser starts executing js-code
+that requests JSON data from server
+end note
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server-->browser: [{ content: "", date: "2022-08-19T21:05:40.348Z" }, ...]
+
+note over browser:
+browser executes the event handler
+that renders notes to display
+end note

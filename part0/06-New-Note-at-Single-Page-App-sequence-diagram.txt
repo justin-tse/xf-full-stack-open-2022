@@ -1,0 +1,16 @@
+title New note at single page app sequence diagram
+
+note over browser:
+user input text and clicking the submit button
+browser executes the event handler 
+prevent form submit default event
+use the input data to create a new note object
+and adds it to an array called notes
+that renders notes to display
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note over server:
+sent this new note stringify json object to the server
+end note
