@@ -1,5 +1,25 @@
 import { useState } from 'react'
 
+const Content = ({ text, select, counter }) => {
+  return (
+    <>
+      <h2>{text}</h2>
+      <p>{select}</p>
+      <p>has {counter} votes</p>
+    </>
+  )
+}
+
+const Buttons = ({ handleClick }) => {
+  const { handleVote, handleNextAnecdote } = handleClick
+  return (
+    <>
+      <button onClick={handleVote}>vote</button>
+      <button onClick={handleNextAnecdote}>next anecdote</button>
+    </>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -47,14 +67,9 @@ const App = () => {
 
   return (
     <div>
-      <h2>Anecdote of the day</h2>
-      <p>{select}</p>
-      <p>has {counters[selectedIndex]} votes</p>
-      <button onClick={handleVote}>vote</button>
-      <button onClick={handleNextAnecdote}>next anecdote</button>
-      <h2>Anecdote with most votes</h2>
-      <p>{anecdotes[mostVoteIdx]}</p>
-      <p>has {mostVote} votes</p>
+      <Content text="Anecdote of the day" select={select} counter={counters[selectedIndex]} />
+      <Buttons handleClick={{ handleVote, handleNextAnecdote }} />
+      <Content text="Anecdote with most votes" select={anecdotes[mostVoteIdx]} counter={mostVote} />
     </div>
   );
 }
