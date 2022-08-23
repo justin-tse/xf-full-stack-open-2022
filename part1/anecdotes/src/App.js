@@ -1,17 +1,15 @@
 import { useState } from 'react'
 
-const Content = ({ text, select, counter }) => {
-  return (
-    <>
-      <h2>{text}</h2>
-      <p>{select}</p>
-      <p>has {counter} votes</p>
-    </>
-  )
-}
+const Anecdote = ({ text, select, counter }) =>
+  <>
+    <h2>{text}</h2>
+    <p>{select}</p>
+    <p>has {counter} votes</p>
+  </>
 
 const Buttons = ({ handleClick }) => {
   const { handleVote, handleNextAnecdote } = handleClick
+
   return (
     <>
       <button onClick={handleVote}>vote</button>
@@ -46,17 +44,20 @@ const App = () => {
   const selectedIndex = anecdotes.indexOf(select)
 
   const handleNextAnecdote = () => {
-    const randomIndex = (Math.random() * (anecdotes.length - 1)).toFixed(0)
-    console.log(randomIndex)
-    setSelect(anecdotes[randomIndex])
-    return randomIndex
+    let newIndex = selectedIndex
+    while (newIndex === selectedIndex) {
+      const randomIndex = Math.round((Math.random() * (anecdotes.length - 1)))
+      newIndex = randomIndex
+    }
+
+    setSelect(anecdotes[newIndex])
   }
 
   const handleVote = () => {
     // 1. initialCounters use array
-    const copy = [...counters]
-    copy[selectedIndex]++
-    setCounters(copy)
+    const newCounters = [...counters]
+    newCounters[selectedIndex]++
+    setCounters(newCounters)
 
     // 2. initialCounters use object
     // setCounters({ ...counters, [selectedIndex]: counters[selectedIndex] + 1 })
@@ -67,11 +68,11 @@ const App = () => {
 
   return (
     <div>
-      <Content text="Anecdote of the day" select={select} counter={counters[selectedIndex]} />
+      <Anecdote text="Anecdote of the day" select={select} counter={counters[selectedIndex]} />
       <Buttons handleClick={{ handleVote, handleNextAnecdote }} />
-      <Content text="Anecdote with most votes" select={anecdotes[mostVoteIdx]} counter={mostVote} />
+      <Anecdote text="Anecdote with most votes" select={anecdotes[mostVoteIdx]} counter={mostVote} />
     </div>
-  );
+  )
 }
 
 export default App;
