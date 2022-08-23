@@ -13,13 +13,13 @@ const App = () => {
   const [select, setSelect] = useState(anecdotes[0])
 
   // 1. initialCounters use array
-  // const initialCounters = new Array(anecdotes.length).fill(0)
-  
+  const initialCounters = new Array(anecdotes.length).fill(0)
+
   // 2. initialCounters use object
-  const initialCounters = new Map()
-  for (let i = 0; i <= anecdotes.length; i++) {
-    initialCounters[i] = 0
-  }
+  // const initialCounters = new Map()
+  // for (let i = 0; i <= anecdotes.length; i++) {
+  //   initialCounters[i] = 0
+  // }
 
   const [counters, setCounters] = useState(initialCounters)
 
@@ -34,20 +34,27 @@ const App = () => {
 
   const handleVote = () => {
     // 1. initialCounters use array
-    // const copy = [...counters]
-    // copy[selectedIndex]++
-    // setCounters(copy)
+    const copy = [...counters]
+    copy[selectedIndex]++
+    setCounters(copy)
 
     // 2. initialCounters use object
-    setCounters({ ...counters, [selectedIndex]: counters[selectedIndex] + 1 })
+    // setCounters({ ...counters, [selectedIndex]: counters[selectedIndex] + 1 })
   }
+
+  const mostVote = Math.max.apply(null, counters)
+  const mostVoteIdx = counters.indexOf(mostVote)
 
   return (
     <div>
+      <h2>Anecdote of the day</h2>
       <p>{select}</p>
       <p>has {counters[selectedIndex]} votes</p>
       <button onClick={handleVote}>vote</button>
       <button onClick={handleNextAnecdote}>next anecdote</button>
+      <h2>Anecdote with most votes</h2>
+      <p>{anecdotes[mostVoteIdx]}</p>
+      <p>has {mostVote} votes</p>
     </div>
   );
 }
