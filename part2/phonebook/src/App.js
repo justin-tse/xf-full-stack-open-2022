@@ -11,7 +11,10 @@ const App = () => {
 
   const handleSubmit = event => {
     event.preventDefault()
-    setPersons(persons.concat({ name: newName }))
+    const newNameObj = { name: newName }
+    persons.some(person => JSON.stringify(person) === JSON.stringify(newNameObj))
+      ? alert(`${newName} is already added to phonebook`)
+      : setPersons(persons.concat(newNameObj))
     setNewName('')
   }
 
