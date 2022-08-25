@@ -1,29 +1,48 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
+const CountryInfo = ({ matchedCountry }) => {
+  return (
+    <>
+      <h2>{matchedCountry.name.common}</h2>
+      <div>capital {matchedCountry.capital[0]}</div>
+      <div>area {matchedCountry.area}</div>
+      <h4>languages:</h4>
+      <ul>
+        {Object.values(matchedCountry.languages).map(language => <li key={language}>{language}</li>)}
+      </ul>
+      <img src={matchedCountry.flags.svg} alt={`the flag of ${matchedCountry.name.common}`} style={{ width: "180px" }} />
+    </>
+  )
+}
+
 const MatchedCountries = ({ matchedCountries }) => {
-  if (matchedCountries.length > 10) {
+  const matchedNum = matchedCountries.length
+  const [show, setShow] = useState(new Array(matchedNum).fill(false))
+  const handleShow = (idx) => {
+    const newShow = [...show]
+    newShow[idx] = !newShow[idx]
+    setShow(newShow)
+  }
+
+  if (matchedNum > 10) {
     return <div>Too many matches, specify another filter</div>
   } else {
-    if (matchedCountries.length > 1) {
+    if (matchedNum > 1) {
+      console.log(show)
       return <>
-        {matchedCountries.map(matchedCountry => <div key={matchedCountry.name.common}>{matchedCountry.name.common}</div>)}
+        {
+          matchedCountries.map((matchedCountry, idx) =>
+            <div key={matchedCountry.name.common}>
+              {matchedCountry.name.common}&nbsp;
+              <button onClick={() => handleShow(idx)}>show</button>
+              {show[idx] && <CountryInfo matchedCountry={matchedCountry} />}
+            </div>)}
       </>
     }
-    if (matchedCountries.length === 1) {
+    if (matchedNum === 1) {
       const matchedCountry = matchedCountries[0]
-      return (
-        <>
-          <h2>{matchedCountry.name.common}</h2>
-          <div>capital {matchedCountry.capital[0]}</div>
-          <div>area {matchedCountry.area}</div>
-          <h4>languages:</h4>
-          <ul>
-            {Object.values(matchedCountry.languages).map(language => <li key={language}>{language}</li>)}
-          </ul>
-          <img src={matchedCountry.flags.svg} alt={`the flag of ${matchedCountry.name.common}`} style={{ width: "180px" }} />
-        </>
-      )
+      return <CountryInfo matchedCountry={matchedCountry} />
     }
   }
 }
