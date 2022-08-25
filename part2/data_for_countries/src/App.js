@@ -72,6 +72,10 @@ const MatchedCountries = ({ matchedCountries }) => {
     setShow(newShow)
   }
 
+  useEffect(() => {
+    setShow(new Array(matchedNum).fill(false))
+  }, [matchedNum])
+
   if (matchedNum > 10) {
     return <div>Too many matches, specify another filter</div>
   } else {
