@@ -12,10 +12,10 @@ const CountryInfo = ({ matchedCountry }) => {
       .get(`http://api.openweathermap.org/data/2.5/weather?q=${matchedCountry.capital[0]},${matchedCountry.name.common}&units=metric&APPID=${apiKey}`)
       .then(res => {
         console.log('promise fulfilled...', res.data)
-        const url = `http://openweathermap.org/img/wn/${res.data.weather[0].icon}@2x.png`
+        const icon = res.data.weather[0].icon
+        const url = `http://openweathermap.org/img/wn/${icon}@2x.png`
         const newWeatherInfo = {
           temp: res.data.main.temp,
-          icon: res.data.weather[0].icon,
           wind: res.data.wind.speed,
           url
         }
@@ -33,13 +33,31 @@ const CountryInfo = ({ matchedCountry }) => {
       <div>area {matchedCountry.area}</div>
       <h4>languages:</h4>
       <ul>
-        {Object.values(matchedCountry.languages).map(language => <li key={language}>{language}</li>)}
+        {Object.values(matchedCountry.languages).map(language =>
+          <li key={language}>
+            {language}
+          </li>)}
       </ul>
       <img src={matchedCountry.flags.svg} alt={`the flag of ${matchedCountry.name.common}`} style={{ width: "180px" }} />
+
       <h3>Weather in {matchedCountry.capital[0]}</h3>
       <div>temperature {weatherInfo.temp} Celcius</div>
       <img src={weatherInfo.url} alt="Weather condition icon" />
       <div>wind {weatherInfo.wind} m/s</div>
+    </>
+  )
+}
+
+const MatchedMoreThanOne = ({ matchedCountries, handleShow, show }) => {
+  return (
+    <>
+      {
+        matchedCountries.map((matchedCountry, idx) =>
+          <div key={matchedCountry.name.common}>
+            {matchedCountry.name.common}&nbsp;
+            <button onClick={() => handleShow(idx)}>show</button>
+            {show[idx] && <CountryInfo matchedCountry={matchedCountry} />}
+          </div>)}
     </>
   )
 }
@@ -58,15 +76,7 @@ const MatchedCountries = ({ matchedCountries }) => {
     return <div>Too many matches, specify another filter</div>
   } else {
     if (matchedNum > 1) {
-      return <>
-        {
-          matchedCountries.map((matchedCountry, idx) =>
-            <div key={matchedCountry.name.common}>
-              {matchedCountry.name.common}&nbsp;
-              <button onClick={() => handleShow(idx)}>show</button>
-              {show[idx] && <CountryInfo matchedCountry={matchedCountry} />}
-            </div>)}
-      </>
+      return <MatchedMoreThanOne matchedCountries={matchedCountries} handleShow={handleShow} show={show} />
     }
     if (matchedNum === 1) {
       const matchedCountry = matchedCountries[0]
