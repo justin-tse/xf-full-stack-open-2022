@@ -1,7 +1,31 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
+const apiKey = process.env.REACT_APP_API_KEY
+
 const CountryInfo = ({ matchedCountry }) => {
+  const [weatherInfo, setWeatherInfo] = useState({})
+
+  useEffect(() => {
+    console.log('effect weatherInfo')
+    axios
+      .get(`http://api.openweathermap.org/data/2.5/weather?q=${matchedCountry.capital[0]},${matchedCountry.name.common}&units=metric&APPID=${apiKey}`)
+      .then(res => {
+        console.log('promise fulfilled...', res.data)
+        const url = `http://openweathermap.org/img/wn/${res.data.weather[0].icon}@2x.png`
+        const newWeatherInfo = {
+          temp: res.data.main.temp,
+          icon: res.data.weather[0].icon,
+          wind: res.data.wind.speed,
+          url
+        }
+        setWeatherInfo(newWeatherInfo)
+      })
+      .catch(e => {
+        console.error("Please definded your own .env file to use your REACT_APP_API_KEY, following the .env.example file in the root")
+      })
+  }, [matchedCountry.name.common, matchedCountry.capital])
+
   return (
     <>
       <h2>{matchedCountry.name.common}</h2>
@@ -12,6 +36,10 @@ const CountryInfo = ({ matchedCountry }) => {
         {Object.values(matchedCountry.languages).map(language => <li key={language}>{language}</li>)}
       </ul>
       <img src={matchedCountry.flags.svg} alt={`the flag of ${matchedCountry.name.common}`} style={{ width: "180px" }} />
+      <h3>Weather in {matchedCountry.capital[0]}</h3>
+      <div>temperature {weatherInfo.temp} Celcius</div>
+      <img src={weatherInfo.url} alt="Weather condition icon" />
+      <div>wind {weatherInfo.wind} m/s</div>
     </>
   )
 }
@@ -19,6 +47,7 @@ const CountryInfo = ({ matchedCountry }) => {
 const MatchedCountries = ({ matchedCountries }) => {
   const matchedNum = matchedCountries.length
   const [show, setShow] = useState(new Array(matchedNum).fill(false))
+
   const handleShow = (idx) => {
     const newShow = [...show]
     newShow[idx] = !newShow[idx]
@@ -29,7 +58,6 @@ const MatchedCountries = ({ matchedCountries }) => {
     return <div>Too many matches, specify another filter</div>
   } else {
     if (matchedNum > 1) {
-      console.log(show)
       return <>
         {
           matchedCountries.map((matchedCountry, idx) =>
@@ -52,7 +80,7 @@ const App = () => {
   const [searchName, setSearchName] = useState('')
 
   useEffect(() => {
-    console.log('effect')
+    console.log('effect countries')
     axios
       .get('https://restcountries.com/v3.1/all')
       .then(res => {
