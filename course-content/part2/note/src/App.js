@@ -45,7 +45,7 @@ const App = props => {
   const toggleImportanceOf = id => {
     console.log(`importance of ${id} needs to be toggled`)
     const note = notes.find(note => note.id === id)
-    const changeNote = { ...note, important: !note.importance }
+    const changeNote = { ...note, important: !note.important }
 
     noteService
       .update(id, changeNote)
