@@ -27,13 +27,31 @@ const App = props => {
       date: new Date().toISOString(),
       important: Math.random() < 0.5,
     }
-    setNotes(notes.concat(noteObject))
-    setNewNote('')
+    axios
+      .post('http://localhost:3001/notes', noteObject)
+      .then(response => {
+        console.log(response)
+        setNotes(notes.concat(response.data))
+        setNewNote('')
+      })
   }
 
   const handleChange = event => {
     console.log(event.target.value)
     setNewNote(event.target.value)
+  }
+
+  const toggleImportanceOf = id => {
+    console.log(`importance of ${id} needs to be toggled`)
+    const url = `http://localhost:3001/notes/${id}`
+    const note = notes.find(note => note.id === id)
+    const changeNote = {...note, important: !note.importance}
+    axios
+      .put(url, changeNote)
+      .then(response => {
+      setNotes(notes.map(note => notes.id !== id ? note : response.data))
+    })
+
   }
 
   const notesToShow = showAll
@@ -50,7 +68,7 @@ const App = props => {
       </div>
       <ul>
         {notesToShow.map(note =>
-          <Note key={note.id} note={note} />
+          <Note key={note.id} note={note} toggleImportanceOf={() => toggleImportanceOf(note.id)} />
         )}
       </ul>
       <form onSubmit={addNote}>
