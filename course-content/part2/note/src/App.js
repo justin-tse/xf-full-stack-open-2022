@@ -52,6 +52,12 @@ const App = props => {
       .then(updateNote => {
         setNotes(notes.map(note => note.id !== id ? note : updateNote))
       })
+      .catch(error => {
+        alert(
+          `the note '${note.content}' was already deleted from server`
+        )
+        setNotes(notes.filter(note => note.id !== id))
+      })
 
   }
 
@@ -80,4 +86,4 @@ const App = props => {
   )
 }
 
-export default App;
+export default App; 
