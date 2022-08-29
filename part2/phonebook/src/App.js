@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import personService from './services/persons'
 
 const Input = ({ text, value, onChange }) => {
   return (
@@ -44,18 +44,17 @@ const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [filterName, setFilterName] = useState('')
 
   useEffect((() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(res => {
-        console.log('promise fulfilled', res)
-        setPersons(res.data)
+    personService
+      .getAll()
+      .then(initialPersons => {
+        console.log('promise fulfilled', initialPersons)
+        setPersons(initialPersons)
       })
   }), [])
-
-  const [filterName, setFilterName] = useState('')
 
   const handleNameChange = event => setNewName(event.target.value)
 
@@ -63,17 +62,17 @@ const App = () => {
 
   const handleSubmit = event => {
     event.preventDefault()
-    const newNameObj = {
+    const newPerson = {
       name: newName,
       number: newNumber
     }
-    axios
-      .post('http://localhost:3001/persons', newNameObj)
+    personService
+      .create(newPerson)
       .then(res => {
-        console.log(newNameObj, 'hellosfsdaf')
+        console.log(newPerson, 'hellosfsdaf')
         persons.some(person => JSON.stringify(person) === JSON.stringify(res))
           ? alert(`${newName} is already added to phonebook`)
-          : setPersons(persons.concat(res.data))
+          : setPersons(persons.concat(res))
         setNewName('')
         setNewNumber('')
       })
