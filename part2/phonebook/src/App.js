@@ -52,11 +52,10 @@ const App = () => {
       .then(res => {
         console.log('promise fulfilled', res)
         setPersons(res.data)
-        setFilterPersons(res.data)
       })
   }), [])
 
-  const [filterPersons, setFilterPersons] = useState([])
+  const [filterName, setFilterName] = useState('')
 
   const handleNameChange = event => setNewName(event.target.value)
 
@@ -76,9 +75,10 @@ const App = () => {
   }
 
   const handleFilterChange = event => {
-    const newFilterPersons = persons.filter(person => person.name.toLowerCase().startsWith(event.target.value.toLowerCase()))
-    setFilterPersons(newFilterPersons)
+    setFilterName(event.target.value)
   }
+
+  const filterPersons = persons.filter(person => person.name.toLowerCase().startsWith(filterName.toLowerCase()))
 
   return (
     <div>

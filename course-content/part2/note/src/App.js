@@ -58,7 +58,6 @@ const App = props => {
         )
         setNotes(notes.filter(note => note.id !== id))
       })
-
   }
 
   const notesToShow = showAll
