@@ -28,12 +28,21 @@ const PersonForm = ({ newName, handleNameChange, newNumber, handleNumberChange, 
 }
 
 const Persons = ({ filterPersons }) => {
+  const handleDelete = (id, name) => {
+    console.log(id, 'i am id')
+    if (window.confirm(`Delete ${name} ?`)) {
+      personService
+        .remove(id)
+        .then(() => console.log('Delete successful'));
+    }
+  }
+
   return (
     <>
       {
         filterPersons.map(person =>
-          <div key={person.name}>
-            {person.name} {person.number}
+          <div key={person.id}>
+            {person.name} {person.number} <button onClick={() => handleDelete(person.id, person.name)}>delete</button>
           </div>)
       }
     </>
@@ -62,20 +71,31 @@ const App = () => {
 
   const handleSubmit = event => {
     event.preventDefault()
-    const newPerson = {
-      name: newName,
-      number: newNumber
+
+    const person = persons.find(person => person.name === newName)
+    if (person) {
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one`)) {
+        const id = person.id
+        const changePerson = { ...person, number: newNumber }
+        personService
+          .update(id, changePerson)
+          .then(updatePerson => {
+            setPersons(persons.map(person => person.id === id ? updatePerson : person))
+          })
+      }
+    } else {
+      const newPerson = {
+        name: newName,
+        number: newNumber
+      }
+      personService
+        .create(newPerson)
+        .then(res => {
+          setPersons(persons.concat(res))
+        })
     }
-    personService
-      .create(newPerson)
-      .then(res => {
-        console.log(newPerson, 'hellosfsdaf')
-        persons.some(person => JSON.stringify(person) === JSON.stringify(res))
-          ? alert(`${newName} is already added to phonebook`)
-          : setPersons(persons.concat(res))
-        setNewName('')
-        setNewNumber('')
-      })
+    setNewName('')
+    setNewNumber('')
   }
 
   const handleFilterChange = event => {
