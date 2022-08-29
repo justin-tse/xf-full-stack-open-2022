@@ -27,15 +27,22 @@ const PersonForm = ({ newName, handleNameChange, newNumber, handleNumberChange, 
   )
 }
 
-const Persons = ({ filterPersons }) => {
+const Persons = ({ filterPersons, persons, setPersons }) => {
+ 
   const handleDelete = (id, name) => {
     console.log(id, 'i am id')
     if (window.confirm(`Delete ${name} ?`)) {
       personService
         .remove(id)
-        .then(() => console.log('Delete successful'));
+        .then(removeId => {
+          console.log('Delete successful', removeId)
+          setPersons(persons.filter(person => person.id !== removeId))
+        });
     }
   }
+  useEffect(() => {
+    setPersons(persons)
+  }, [])
 
   return (
     <>
@@ -112,7 +119,7 @@ const App = () => {
       <h3>add a new</h3>
       <PersonForm newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange} handleSubmit={handleSubmit} />
       <h3>Numbers</h3>
-      <Persons filterPersons={filterPersons} />
+      <Persons filterPersons={filterPersons} setPersons={setPersons} persons={persons} />
     </div>
   )
 }
