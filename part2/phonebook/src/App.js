@@ -67,18 +67,24 @@ const App = () => {
       name: newName,
       number: newNumber
     }
-    persons.some(person => JSON.stringify(person) === JSON.stringify(newNameObj))
-      ? alert(`${newName} is already added to phonebook`)
-      : setPersons(persons.concat(newNameObj))
-    setNewName('')
-    setNewNumber('')
+    axios
+      .post('http://localhost:3001/persons', newNameObj)
+      .then(res => {
+        console.log(newNameObj, 'hellosfsdaf')
+        persons.some(person => JSON.stringify(person) === JSON.stringify(res))
+          ? alert(`${newName} is already added to phonebook`)
+          : setPersons(persons.concat(res.data))
+        setNewName('')
+        setNewNumber('')
+      })
   }
 
   const handleFilterChange = event => {
     setFilterName(event.target.value)
   }
 
-  const filterPersons = persons.filter(person => person.name.toLowerCase().startsWith(filterName.toLowerCase()))
+  const filterPersons = persons.filter(person => person.name.toLowerCase().startsWith(filterName.toLowerCase())
+  )
 
   return (
     <div>
