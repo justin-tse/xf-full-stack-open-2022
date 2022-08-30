@@ -1,60 +1,8 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
-
-const Input = ({ text, value, onChange }) => {
-  return (
-    <div>
-      {text}: <input value={value} onChange={onChange} />
-    </div>
-  )
-}
-
-const Filter = ({ handleFilterChange }) => {
-  return (
-    <div>filter shown with<input onChange={handleFilterChange} /></div>
-  )
-}
-
-const PersonForm = ({ newName, handleNameChange, newNumber, handleNumberChange, handleSubmit }) => {
-  return (
-    <form >
-      <Input text='name' value={newName} onChange={handleNameChange} />
-      <Input text='number' value={newNumber} onChange={handleNumberChange} />
-      <div>
-        <button type="submit" onClick={handleSubmit}>add</button>
-      </div>
-    </form>
-  )
-}
-
-const Persons = ({ filterPersons, persons, setPersons }) => {
- 
-  const handleDelete = (id, name) => {
-    console.log(id, 'i am id')
-    if (window.confirm(`Delete ${name} ?`)) {
-      personService
-        .remove(id)
-        .then(removeId => {
-          console.log('Delete successful', removeId)
-          setPersons(persons.filter(person => person.id !== removeId))
-        });
-    }
-  }
-  useEffect(() => {
-    setPersons(persons)
-  }, [])
-
-  return (
-    <>
-      {
-        filterPersons.map(person =>
-          <div key={person.id}>
-            {person.name} {person.number} <button onClick={() => handleDelete(person.id, person.name)}>delete</button>
-          </div>)
-      }
-    </>
-  )
-}
+import Filter from "./components/Filter"
+import PersonForm from "./components/PersonForm"
+import Persons from "./components/Persons"
 
 const App = () => {
   const [persons, setPersons] = useState([])
