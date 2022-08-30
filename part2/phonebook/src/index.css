@@ -1,0 +1,10 @@
+.note {
+  color: green;
+  background: lightgrey;
+  font-size: 25px;
+  border: 3px;
+  border-style: solid;
+  border-radius: 10px;
+  padding: 5px;
+  margin-bottom: 10px;
+}

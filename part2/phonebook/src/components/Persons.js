@@ -1,6 +1,6 @@
 import personService from '../services/persons'
 
-const Persons = ({ filterPersons, persons, setPersons }) => {
+const Persons = ({ filterPersons, persons, setPersons, message, setMessage }) => {
   const handleDelete = (id, name) => {
     console.log(id, 'i am id')
     if (window.confirm(`Delete ${name} ?`)) {
@@ -10,6 +10,10 @@ const Persons = ({ filterPersons, persons, setPersons }) => {
           console.log('Delete successful', removeId)
           setPersons(persons.filter(person => person.id !== removeId))
         });
+      setMessage(`Delete ${name} successful.`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     }
   }
 

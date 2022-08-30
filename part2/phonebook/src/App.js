@@ -3,12 +3,14 @@ import personService from './services/persons'
 import Filter from "./components/Filter"
 import PersonForm from "./components/PersonForm"
 import Persons from "./components/Persons"
+import Notification from "./components/Notification"
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
+  const [message, setMessage] = useState('null')
 
   useEffect((() => {
     console.log('effect')
@@ -27,6 +29,15 @@ const App = () => {
   const handleSubmit = event => {
     event.preventDefault()
 
+    const updateState = message => {
+      setMessage(message)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+      setNewName('')
+      setNewNumber('')
+    }
+
     const person = persons.find(person => person.name === newName)
     if (person) {
       if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one`)) {
@@ -37,6 +48,7 @@ const App = () => {
           .then(updatePerson => {
             setPersons(persons.map(person => person.id === id ? updatePerson : person))
           })
+        updateState(`Update ${newName}'s number`)
       }
     } else {
       const newPerson = {
@@ -48,9 +60,8 @@ const App = () => {
         .then(res => {
           setPersons(persons.concat(res))
         })
+      updateState(`Added ${newName}`)
     }
-    setNewName('')
-    setNewNumber('')
   }
 
   const handleFilterChange = event => {
@@ -63,11 +74,12 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter handleFilterChange={handleFilterChange} />
       <h3>add a new</h3>
       <PersonForm newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange} handleSubmit={handleSubmit} />
       <h3>Numbers</h3>
-      <Persons filterPersons={filterPersons} setPersons={setPersons} persons={persons} />
+      <Persons filterPersons={filterPersons} setPersons={setPersons} persons={persons} message={message} setMessage={setMessage} />
     </div>
   )
 }
