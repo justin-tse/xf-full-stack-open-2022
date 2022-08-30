@@ -4,6 +4,21 @@ import axios from 'axios';
 import noteService from './services/notes';
 import Notification from "./components/Notification";
 
+const Footer = () => {
+  const footerStyle = {
+    color: 'green',
+    fontStyle: 'italic',
+    fontSize: 16
+  }
+
+  return (
+    <div style={footerStyle}>
+      <br />
+      <em>Note app, Department of Computer Science, University of Helsinki 2022</em>
+    </div>
+  )
+}
+
 const App = props => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('a new note...')
@@ -72,7 +87,7 @@ const App = props => {
   return (
     <div>
       <h1>Notes</h1>
-      <Notification message={errorMessage}/>
+      <Notification message={errorMessage} />
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? 'important' : 'all'}
@@ -87,6 +102,7 @@ const App = props => {
         <input value={newNote} onChange={handleChange} />
         <button type="submit">save</button>
       </form>
+      <Footer />
     </div>
   )
 }
