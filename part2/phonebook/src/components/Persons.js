@@ -9,11 +9,11 @@ const Persons = ({ filterPersons, persons, setPersons, message, setMessage }) =>
         .then(removeId => {
           console.log('Delete successful', removeId)
           setPersons(persons.filter(person => person.id !== removeId))
+          setMessage(`Delete ${name} successful.`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
         });
-      setMessage(`Delete ${name} successful.`)
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
     }
   }
 

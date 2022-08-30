@@ -10,7 +10,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
-  const [message, setMessage] = useState('null')
+  const [message, setMessage] = useState(null)
+  const [warningColor, setWarningColor] = useState('green')
 
   useEffect((() => {
     console.log('effect')
@@ -47,8 +48,14 @@ const App = () => {
           .update(id, changePerson)
           .then(updatePerson => {
             setPersons(persons.map(person => person.id === id ? updatePerson : person))
+            updateState(`Update ${newName}'s number`)
+          }).catch(error => {
+            setWarningColor('red')
+            updateState(`Information of ${newName} has already been removed from server`)
+            setTimeout(() => {
+              setWarningColor('green')
+            }, 5000)
           })
-        updateState(`Update ${newName}'s number`)
       }
     } else {
       const newPerson = {
@@ -59,8 +66,8 @@ const App = () => {
         .create(newPerson)
         .then(res => {
           setPersons(persons.concat(res))
+          updateState(`Added ${newName}`)
         })
-      updateState(`Added ${newName}`)
     }
   }
 
@@ -74,10 +81,10 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message} />
+      <Notification message={message} warningColor={warningColor} />
       <Filter handleFilterChange={handleFilterChange} />
       <h3>add a new</h3>
-      <PersonForm newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange} handleSubmit={handleSubmit} />
+      <PersonForm newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange} handleSubmit={handleSubmit} setWarningColor={setWarningColor} />
       <h3>Numbers</h3>
       <Persons filterPersons={filterPersons} setPersons={setPersons} persons={persons} message={message} setMessage={setMessage} />
     </div>
