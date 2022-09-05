@@ -1,0 +1,9 @@
+GET http://localhost:3001/api/notes
+###
+POST http://localhost:3001/api/notes 
+content-type: application/json
+
+{
+    "content": "VS code REST client is pre",
+    "important": false
+}
