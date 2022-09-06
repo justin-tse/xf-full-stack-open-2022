@@ -29,7 +29,7 @@ app.get('/', (request, response) => {
   response.send('<h1>Hello World</h1>')
 })
 
-app.get('/persons', (request, response) => {
+app.get('/api/persons', (request, response) => {
   response.json(persons)
 })
 
@@ -44,9 +44,17 @@ app.get('/api/persons/:id', (request, response) => {
   if (person) {
     response.json(person)
   } else {
-    response.status(400).end("Can not find person")
+    response.status(400).end("Can not find this person")
   }
 })
+
+app.delete('/api/persons/:id', (request, response) => {
+  const id = request.params.id
+  persons.filter(person => person.id !== id)
+
+  response.status(204).end()
+})
+
 const PORT = 3001
 app.listen(PORT)
 console.log(`Server on ${PORT}`)
