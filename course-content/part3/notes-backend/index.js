@@ -1,8 +1,5 @@
-const { response } = require("express")
 const express = require('express')
 const app = express()
-
-app.use(express.json())
 
 let notes = [
   {
@@ -24,6 +21,18 @@ let notes = [
     important: true
   }
 ]
+
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+
+app.use(express.json())
+
+app.use(requestLogger)
 
 app.get('/', (resquest, response) => {
   response.send('<h1>Hello World!</h1>')
@@ -69,8 +78,6 @@ app.post('/api/notes', (request, response) => {
   }
 
   notes = notes.concat(note)
-  console.log(note)
-  console.log(notes)
   response.json(note)
 })
 
@@ -81,6 +88,12 @@ app.delete('/api/notes/:id', (request, response) => {
 
   response.status(204).end()
 })
+
+const unknowEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknowEndpoint)
 
 const PORT = 3001
 app.listen(PORT)
