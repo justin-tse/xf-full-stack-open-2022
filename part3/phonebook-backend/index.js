@@ -43,7 +43,18 @@ app.post('/api/persons', (request, response) => {
   console.log(body, "hellasfasfsd")
   if (!body.name) {
     return response.status(400).json({
-      error: 'content missing'
+      error: 'name missing'
+    })
+  }
+  if (!body.number) {
+    return response.status(400).json({
+      error: 'number missing'
+    })
+  }
+const hasPerson =  persons.find(person => person.name === body.name)
+  if (hasPerson) {
+    return response.status(400).json({
+      error: 'name must be unique'
     })
   }
 
