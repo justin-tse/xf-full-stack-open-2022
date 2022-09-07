@@ -36,6 +36,9 @@ app.use(express.json())
 app.use(cors())
 app.use(requestLogger)
 
+// the front end static webside
+app.use(express.static('build'))
+
 app.get('/', (resquest, response) => {
   response.send('<h1>Hello World!</h1>')
 })
@@ -95,6 +98,7 @@ const unknowEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
+// something went wrong will tell us the error
 app.use(unknowEndpoint)
 
 const PORT = process.env.PORT || 3001
