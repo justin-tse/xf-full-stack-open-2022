@@ -1,7 +1,6 @@
-const { response } = require("express")
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
-app.use(express.json())
 
 let persons = [
   {
@@ -26,6 +25,9 @@ let persons = [
   }
 ]
 
+app.use(express.json())
+app.use(morgan('tiny'))
+
 app.get('/', (request, response) => {
   response.send('<h1>Hello World</h1>')
 })
@@ -40,7 +42,7 @@ const generateId = () => {
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
-  console.log(body, "hellasfasfsd")
+  
   if (!body.name) {
     return response.status(400).json({
       error: 'name missing'
@@ -51,7 +53,7 @@ app.post('/api/persons', (request, response) => {
       error: 'number missing'
     })
   }
-const hasPerson =  persons.find(person => person.name === body.name)
+  const hasPerson = persons.find(person => person.name === body.name)
   if (hasPerson) {
     return response.status(400).json({
       error: 'name must be unique'
