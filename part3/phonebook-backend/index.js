@@ -26,7 +26,11 @@ let persons = [
 ]
 
 app.use(express.json())
+
 app.use(morgan('tiny'))
+
+morgan.token('data', function (req, res) { return JSON.stringify(req.body) })
+app.use(morgan(':data'))
 
 app.get('/', (request, response) => {
   response.send('<h1>Hello World</h1>')
@@ -42,7 +46,7 @@ const generateId = () => {
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
-  
+
   if (!body.name) {
     return response.status(400).json({
       error: 'name missing'
@@ -65,7 +69,6 @@ app.post('/api/persons', (request, response) => {
     name: body.name,
     number: body.number
   }
-  console.log(person, 'person')
 
   persons = persons.concat(person)
 
