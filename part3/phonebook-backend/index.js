@@ -1,5 +1,6 @@
 const express = require('express')
 const morgan = require('morgan')
+const cors = require('cors')
 const app = express()
 
 let persons = [
@@ -24,6 +25,8 @@ let persons = [
     "number": "39-23-6423122"
   }
 ]
+
+app.use(cors())
 
 app.use(express.json())
 
@@ -72,7 +75,7 @@ app.post('/api/persons', (request, response) => {
 
   persons = persons.concat(person)
 
-  response.json(persons)
+  response.json(person)
 })
 
 app.get('/info', (request, response) => {
