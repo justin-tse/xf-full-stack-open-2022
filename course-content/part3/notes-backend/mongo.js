@@ -21,14 +21,11 @@ mongoose
   .connect(url)
   .then((result) => {
     console.log('connected')
-    const note = new Note({
-      content: 'HTML is Easy',
-      date: new Date(),
-      important: false,
-    })
-  
-    note.save().then(result => {
-      console.log('note saved!')
+
+    Note.find({ important: true }).then(result => {
+      result.forEach(note => {
+        console.log(note)
+      })
       mongoose.connection.close()
     })
   })
