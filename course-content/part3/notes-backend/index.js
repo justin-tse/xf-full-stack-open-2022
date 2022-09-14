@@ -1,7 +1,30 @@
 const express = require('express')
 const cors = require('cors')
+const mongoose = require('mongoose')
 
 const app = express()
+
+const password = 8888
+
+const url = `mongodb+srv://xf-fullstack-2022:${password}@cluster0.onlalo2.mongodb.net/noteApp?retryWrites=true&w=majority`
+
+mongoose.connect(url)
+
+const noteSchema = new mongoose.Schema({
+  content: String,
+  data: Date,
+  important: Boolean,
+})
+
+noteSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
+})
+
+const Note = mongoose.model('Note', noteSchema)
 
 let notes = [
   {
@@ -44,7 +67,9 @@ app.get('/', (resquest, response) => {
 })
 
 app.get('/api/notes', (request, response) => {
-  response.json(notes)
+  Note.find({}).then(notes => {
+    response.json(notes)
+  })
 })
 
 app.get('/api/notes/:id', (request, response) => {
