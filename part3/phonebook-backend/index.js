@@ -59,8 +59,9 @@ app.post('/api/persons', (request, response) => {
   })
 })
 
-app.get('/info', (request, response) => {
-  response.send(`<div>Phonebook has info for ${persons.length} people</div> 
+app.get('/info', async (request, response) => {
+  const count = await Person.count({})
+  response.send(`<div>Phonebook has info for ${count} people</div> 
   <p>${new Date()}</p>`)
 })
 
@@ -77,10 +78,24 @@ app.get('/api/persons/:id', (request, response) => {
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-  const id = request.params.id
-  persons.filter(person => person.id !== id)
+  Person.findByIdAndRemove(request.params.id).then(response => {
+    response.status(204).end()
+  })
+})
 
-  response.status(204).end()
+app.put('/api/persons/:id', (request, response) => {
+  const body = request.body
+
+  const person = {
+    name: body.content,
+    number: body.number
+  }
+
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    .then(updatedPerson => {
+      response.json(updatedPerson)
+    })
+    .catch(error => next(error))
 })
 
 const PORT = process.env.PORT
