@@ -5,10 +5,10 @@ const url = process.env.MONGODB_URI
 console.log('connecting to', url)
 
 mongoose.connect(url)
-  .then(result => {
+  .then(() => {
     console.log('connected to MongoDB')
   })
-  .catch(err => {
+  .catch(error => {
     console.log('error connecting to MongoDB:', error.message)
   })
 
@@ -18,8 +18,8 @@ const noteSchema = new mongoose.Schema({
     minLength: 5,
     required: true
   },
-  data: {
-    type: Date,
+  date: {
+    type: Object,
     required: true
   },
   important: Boolean,

@@ -45,12 +45,14 @@ app.get('/api/notes/:id', (request, response, next) => {
 
 app.post('/api/notes', (request, response, next) => {
   const body = request.body
+  console.log('########\n', body)
 
   const note = new Note({
     content: body.content,
     important: body.important || false,
     date: new Date(),
   })
+  console.log('\n`````````', note, 'note is here`````````\n')
 
   note.save()
     .then(saveNote => {
