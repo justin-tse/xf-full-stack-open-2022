@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 const Persons = ({ filterPersons, handleDelete }) => {
 
   return (
@@ -10,6 +12,11 @@ const Persons = ({ filterPersons, handleDelete }) => {
       }
     </>
   )
+}
+
+Persons.propTypes = {
+  filterPersons: PropTypes.array,
+  handleDelete: PropTypes.func
 }
 
 export default Persons

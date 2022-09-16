@@ -15,6 +15,7 @@
   "author": "Justin-Tse",
   "license": "ISC",
   "devDependencies": {
+    "eslint": "^8.23.1",
     "nodemon": "^2.0.19"
   },
   "dependencies": {

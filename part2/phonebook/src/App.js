@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
-import Filter from "./components/Filter"
-import PersonForm from "./components/PersonForm"
-import Persons from "./components/Persons"
-import Notification from "./components/Notification"
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -26,7 +26,7 @@ const App = () => {
 
   const handleNumberChange = event => setNewNumber(event.target.value)
 
-  const updateState = (message, type = `info`) => {
+  const updateState = (message, type = 'info') => {
     setMessage({ message, type })
     setTimeout(() => {
       setMessage(null)
@@ -85,7 +85,7 @@ const App = () => {
           console.log('Delete successful', removeId)
           setPersons(persons.filter(person => person.id !== removeId))
           updateState(`Delete ${name} successful.`)
-        });
+        })
     }
   }
 

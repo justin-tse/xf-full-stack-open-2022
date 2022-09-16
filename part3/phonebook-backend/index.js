@@ -15,7 +15,7 @@ app.use(express.static('build'))
 
 // morgan shows the data sent in HTTP POST requests
 app.use(morgan('tiny'))
-morgan.token('data', function (req, res) { return JSON.stringify(req.body) })
+morgan.token('data', function (request) { return JSON.stringify(request.body) })
 app.use(morgan(':data'))
 
 app.get('/', (request, response) => {
@@ -36,8 +36,6 @@ app.post('/api/persons', (request, response, next) => {
     number: body.number
   })
 
-  let error = person.validateSync();
-
   person.save()
     .then(savedPerson => {
       response.json(savedPerson)
@@ -57,7 +55,7 @@ app.get('/api/persons/:id', (request, response, next) => {
       if (person) {
         response.json(person)
       } else {
-        response.statusCode(400).end("can not find the person")
+        response.statusCode(400).end('can not find the person')
       }
     })
     .catch(error => next(error))
@@ -65,7 +63,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
