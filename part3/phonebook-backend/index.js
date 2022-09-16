@@ -1,17 +1,14 @@
 require('dotenv').config()
 const express = require('express')
+const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
-const app = express()
 
 const Person = require('./models/person')
 
-app.use(express.json())
-
-
 app.use(cors())
-
 app.use(express.static('build'))
+app.use(express.json())
 
 // morgan shows the data sent in HTTP POST requests
 app.use(morgan('tiny'))
@@ -52,11 +49,7 @@ app.get('/info', async (request, response) => {
 app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id)
     .then(person => {
-      if (person) {
-        response.json(person)
-      } else {
-        response.statusCode(400).end('can not find the person')
-      }
+      response.json(person)
     })
     .catch(error => next(error))
 })
@@ -77,7 +70,10 @@ app.put('/api/persons/:id', (request, response, next) => {
     number: body.number
   }
 
-  Person.findByIdAndUpdate(request.params.id, person, { new: true, runValidators: true, context: 'query' })
+  Person.findByIdAndUpdate(
+    request.params.id, person,
+    { new: true, runValidators: true, context: 'query' }
+  )
     .then(updatedPerson => {
       response.json(updatedPerson)
     })

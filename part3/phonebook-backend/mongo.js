@@ -19,7 +19,7 @@ const Person = mongoose.model('person', personSchema)
 
 mongoose
   .connect(url)
-  .then(result => {
+  .then(() => {
     console.log('connect')
     if (process.argv.length > 3) {
       const name = process.argv[3]
@@ -28,7 +28,7 @@ mongoose
         name: name,
         number: number
       })
-      person.save().then(res => {
+      person.save().then(() => {
         mongoose.connection.close()
       })
     } else {
@@ -37,7 +37,7 @@ mongoose
         result.forEach(person => {
           console.log(person.name, person.number)
         })
-      }).then(res => {
+      }).then(() => {
         mongoose.connection.close()
       })
     }
