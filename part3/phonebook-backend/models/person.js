@@ -16,8 +16,15 @@ const personSchema = new mongoose.Schema({
     required: true
   },
   number: {
-    type: Number,
-    required: true
+    type: String,
+    minLength: 8,
+    required: [true, 'User phone number required'],
+    validate: {
+      validator: function (v) {
+        return /^\d{2,3}-\d{6}\d*$/.test(v)
+      },
+      message: props => `${props.value} is not a valid phone number!`
+    }
   }
 })
 

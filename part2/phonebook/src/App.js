@@ -50,9 +50,11 @@ const App = () => {
           .then(updatePerson => {
             setPersons(persons.map(person => person.id === id ? updatePerson : person))
             updateState(`Update ${newName}'s number`)
-          }).catch(error => {
-            updateState(`Information of ${newName} has already been removed from server`, 'warning')
-            setPersons(persons.filter(person => person.id !== id))
+          })
+          .catch(error => {
+            console.log(error)
+            updateState(error.response.data.error, 'warning')
+            // setPersons(persons.filter(person => person.id !== id))
           })
       }
     } else {
