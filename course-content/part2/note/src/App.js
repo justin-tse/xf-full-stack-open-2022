@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import Note from "./components/Note";
-import noteService from './services/notes';
-import Notification from "./components/Notification";
+import { useState, useEffect } from 'react'
+import Note from './components/Note'
+import noteService from './services/notes'
+import Notification from './components/Notification'
 
 const Footer = () => {
   const footerStyle = {
@@ -18,7 +18,7 @@ const Footer = () => {
   )
 }
 
-const App = props => {
+const App = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('a new note...')
   const [showAll, setShowAll] = useState(true)
@@ -68,7 +68,7 @@ const App = props => {
       .then(updateNote => {
         setNotes(notes.map(note => note.id !== id ? note : updateNote))
       })
-      .catch(error => {
+      .catch(() => {
         setErrorMessage(
           `Note '${note.content}' was already deleted from server`
         )
@@ -106,4 +106,4 @@ const App = props => {
   )
 }
 
-export default App; 
+export default App 
