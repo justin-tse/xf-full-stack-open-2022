@@ -66,6 +66,7 @@ const App = () => {
           setPersons(persons.concat(res))
           updateState(`Added ${newName}`)
         })
+        .catch(error => updateState(error.response.data.error, 'warning'))
     }
   }
 
