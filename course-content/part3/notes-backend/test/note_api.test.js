@@ -10,12 +10,11 @@ beforeEach(async () => {
   await Note.deleteMany({})
   console.log('cleared')
 
-  initialNotes.forEach(async (note) => {
-    const noteObject = new Note(note)
-    await noteObject.save()
-    console.log('saved')
-  })
-  console.log('done')
+  const noteObjects = initialNotes.map(note => new Note(note))
+  const promiseArray = noteObjects.map(note => note.save())
+  await Promise.all(promiseArray)
+
+  console.log('saved')
 })
 
 test('notes are returned as json', async () => {
