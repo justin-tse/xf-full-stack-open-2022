@@ -48,10 +48,10 @@ test('a valid note can be added', async () => {
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
-  const notesAsEnd = await notesInDb()
-  expect(notesAsEnd).toHaveLength(initialNotes.length + 1)
+  const notesAtEnd = await notesInDb()
+  expect(notesAtEnd).toHaveLength(initialNotes.length + 1)
 
-  const contents = notesAsEnd.map(res => res.content)
+  const contents = notesAtEnd.map(res => res.content)
   expect(contents).toContain(
     'async/await simplifies making async calls'
   )
@@ -67,9 +67,8 @@ test('note without content is not added', async () => {
     .send(newNote)
     .expect(400)
 
-  const notesAsEnd = await notesInDb()
-
-  expect(notesAsEnd).toHaveLength(initialNotes.length)
+  const notesAtEnd = await notesInDb()
+  expect(notesAtEnd).toHaveLength(initialNotes.length)
 })
 
 afterAll(() => {
