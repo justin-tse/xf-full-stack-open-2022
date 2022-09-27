@@ -1,4 +1,4 @@
-const blogs = [
+const initialBlogs = [
   {
     _id: '5a422a851b54a676234d17f7',
     title: 'React patterns',
@@ -55,7 +55,6 @@ const dummy = () => {
 
 const totalLikes = (blogs) => {
   if (blogs.length === 0) return 0
-  if (blogs.length === 1) return blogs[0].likes
   const likesArr = blogs.map(blog => blog.likes)
   return likesArr.reduce((prev, curv) => prev + curv)
 }
@@ -113,11 +112,18 @@ const mostLikes = (blogs) => {
   return name
 }
 
+const Blog = require('../models/blog')
+const blogsInDb = async () => {
+  const blogs = await Blog.find({})
+  return blogs.map(blog => blog.toJSON())
+}
+
 module.exports = {
-  blogs,
+  initialBlogs,
   dummy,
   totalLikes,
   favoriteBlog,
   mostBlogs,
   mostLikes,
+  blogsInDb,
 }

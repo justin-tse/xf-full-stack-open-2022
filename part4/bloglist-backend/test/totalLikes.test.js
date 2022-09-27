@@ -1,4 +1,4 @@
-const { blogs, totalLikes } = require('../utils/list_helper')
+const { initialBlogs, totalLikes } = require('../utils/list_helper')
 
 describe('total likes', () => {
   const listWithOneBlog = [
@@ -21,6 +21,6 @@ describe('total likes', () => {
   })
 
   test('of a bigger list is calculated right', () => {
-    expect(totalLikes(blogs)).toBe(36)
+    expect(totalLikes(initialBlogs)).toBe(36)
   })
 })
