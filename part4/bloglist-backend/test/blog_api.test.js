@@ -8,9 +8,9 @@ const { initialBlogs, blogsInDb } = require('../utils/list_helper')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
-  const blogs = initialBlogs.map(blog => new Blog(blog))
-  const blogArray = blogs.map(blog => blog.save())
-  await Promise.all(blogArray)
+  const blogObjects = initialBlogs.map(blog => new Blog(blog))
+  const promiseArray = blogObjects.map(blog => blog.save())
+  await Promise.all(promiseArray)
 })
 
 test('blogs are returned as json', async () => {
@@ -18,7 +18,7 @@ test('blogs are returned as json', async () => {
     .get('/api/blogs')
     .expect(200)
     .expect('Content-Type', /application\/json/)
-}, 10000)
+}, 100000)
 
 test('the unique identifier property of the blog posts is named id', async () => {
   const response = await api.get('/api/blogs')
@@ -40,10 +40,11 @@ test('a valid blog can be added', async () => {
   expect(blogsAtEnd).toHaveLength(initialBlogs.length + 1)
 })
 
-test.only('existing likes property', async () => {
+test('existing likes property', async () => {
   const newBlog = new Blog({
     title: 'likes'
   })
+
   await api
     .post('/api/blogs')
     .send(newBlog)
@@ -51,6 +52,18 @@ test.only('existing likes property', async () => {
   const blogsAtEnd = await blogsInDb()
   expect(blogsAtEnd[blogsAtEnd.length - 1]).toHaveProperty('likes', 0)
 })
+
+test('verifies that if the title and url properties are missing from the request data', async () => {
+  const newBlog = new Blog({
+    // title: 'likes',
+    // url: 'www'
+  })
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+}, 50000)
 
 afterAll(() => {
   mongoose.connection.close()

@@ -22,7 +22,11 @@ blogsRouter.post('/', (request, response) => {
   blog
     .save()
     .then((result) => {
-      response.status(201).json(result)
+      if (body.title || body.url) {
+        response.status(201).json(result)
+      } else {
+        response.status(400).end()
+      }
     })
 })
 
