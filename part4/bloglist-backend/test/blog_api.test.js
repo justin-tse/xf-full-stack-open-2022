@@ -65,6 +65,21 @@ test('verifies that if the title and url properties are missing from the request
     .expect(400)
 }, 50000)
 
+test('delete a single blog', async () => {
+  const blogsAtStart = await blogsInDb()
+  const blogToDelete = blogsAtStart[0]
+
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
+
+  const blogsAtEnd = await blogsInDb()
+  expect(blogsAtEnd).toHaveLength(initialBlogs.length - 1)
+
+  const titles = blogsAtEnd.map(blog => blog.title)
+  expect(titles).not.toContain(blogToDelete.title)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
