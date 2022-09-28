@@ -65,6 +65,19 @@ test('verifies that if the title and url properties are missing from the request
     .expect(400)
 }, 50000)
 
+test('test update', async () => {
+  const blogsAtStart = await blogsInDb()
+  const blogToUpdate = blogsAtStart[0]
+  const blog = { likes: 311 }
+
+  await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send(blog)
+
+  const blogsAtEnd = await blogsInDb()
+  expect(blogsAtEnd[0]).toHaveProperty('likes', blog.likes)
+})
+
 test('delete a single blog', async () => {
   const blogsAtStart = await blogsInDb()
   const blogToDelete = blogsAtStart[0]
