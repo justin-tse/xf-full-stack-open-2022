@@ -6,6 +6,7 @@ const cors = require('cors')
 const notesRouter = require('./controllers/notes')
 const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
+const usersRouter = require('./controllers/users')
 const mongoose = require('mongoose')
 
 logger.info('connecting to', config.MONGODB_URI)
@@ -25,11 +26,13 @@ app.use(express.json())
 app.use(middleware.requestLogger)
 
 app.use('/api/notes', notesRouter)
+app.use('/api/users', usersRouter)
 
 // handler of requests with unknown endpoint
 app.use(middleware.unknownEndpoint)
 
 // handler of requests with result to errors
 app.use(middleware.errorHandler)
+
 
 module.exports = app
